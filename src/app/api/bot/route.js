@@ -53,9 +53,9 @@ function main() {
 
 let interval = null
 
+let menit = 1;
 
 bot.on('message:text', async (ctx) => {
-    let menit = 1;
     if (ctx.message.text == "/slebeweuy") {
         interval = setInterval(() => {
             main();
