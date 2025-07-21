@@ -8,6 +8,7 @@ const token = process.env.TELEGRAM_BOT_TOKEN
 
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.')
 
+const bot = new Bot(token)
 
 
 
@@ -16,7 +17,6 @@ if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.'
 const chat_id = process.env.CHAT_ID_GROUP;
 const EVENT_NAME = "Launched Token TetrisChain"
 const EVENT_TIME = "2025-07-25 20:00:00"
-
 
 
 function getCountdown(eventTimeStr) {
@@ -37,28 +37,9 @@ function getCountdown(eventTimeStr) {
     return { jam, menit, detik };
 }
 
-
-
-
-
-
-const TelegramBot = require('node-telegram-bot-api');
-
-const brot = new TelegramBot(token, { polling: true });
-
-// Handle commands/messages
-brot.on('message', (msg) => {
-  console.log(`Received message from ${msg.chat.id}: ${msg.text}`);
-
-  if (msg.text === '/stop') {
-    brot.sendMessage(msg.chat.id, '👋 Stopping bot...');
-    brot.stopPolling(); // 🛑 Stop long polling here
-  }
-});
-
-setInterval(()=> {
-     if(!getCountdown(EVENT_TIME)){
-        brot.sendMessage(chat_id, `${EVENT_NAME} is Live now Checkout https://x.com/tetrischain`)
+function main(){
+    if(!getCountdown(EVENT_TIME)){
+        bot.api.sendMessage(chat_id, `${EVENT_NAME} is Live now Checkout https://x.com/tetrischain`)
     }
 
     const {jam, menit, detik } = getCountdown(EVENT_TIME);
@@ -67,11 +48,26 @@ setInterval(()=> {
                   🔥Stay Ready!."
                   🌐https://tetrischain.fun/`;
     
-    brot.sendMessage(chat_id, CUSTOM_MESSAGE);
-}, (60*1000)*5)
+    bot.api.sendMessage(chat_id, CUSTOM_MESSAGE);
+}
+
+bot.on('message:text', async (ctx) => {
+    let interval = null
+    let menit = 1;
+    if(ctx.message.text == "/slebeweuy"){
+        interval = setInterval(()=> {
+            main();
+        }, (60*1000)*menit)
+    }
+
+    if(ctx.message.text == "/guesah"){
+        clearInterval(interval);
+    }
+
+    
+})
 
 
 
+export const POST = webhookCallback(bot, 'std/http')
 
-
-export const POST = brot.setWebHook("https://api.telegram.org/bot"+token)
