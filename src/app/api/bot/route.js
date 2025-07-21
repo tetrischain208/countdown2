@@ -54,7 +54,7 @@ function main(){
 bot.command("start", (ctx)=> {
     setInterval(()=> {
         main();
-    }, 5000);
+    }, (60*1000)*5);
 })
 
 
@@ -63,3 +63,7 @@ bot.start()
 
 
 export const POST = webhookCallback(bot, 'std/http')
+
+export async function GET() {
+  return Response.json({ message: 'Hello World' })
+}
