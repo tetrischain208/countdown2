@@ -58,10 +58,13 @@ bot.on('message:text', async (ctx) => {
         interval = setInterval(()=> {
             main();
         }, (60*1000)*menit)
+
+        ctx.reply("geus tah")
     }
 
     if(ctx.message.text == "/guesah"){
         clearInterval(interval);
+        ctx.reply("geus tah")
     }
 
     
