@@ -11,9 +11,6 @@ if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.'
 const bot = new Bot(token)
 
 
-
-
-
 const chat_id = process.env.CHAT_ID_GROUP;
 const EVENT_NAME = "Launched Token TetrisChain"
 const EVENT_TIME = "2025-07-25 20:00:00"
@@ -71,6 +68,22 @@ bot.on('message:text', async (ctx) => {
 
 
 })
+
+
+const TelegramBot = require('node-telegram-bot-api');
+
+const brot = new TelegramBot(token, { polling: true });
+
+// Handle commands/messages
+brot.on('message', (msg) => {
+    console.log(`Received message from ${msg.chat.id}: ${msg.text}`);
+
+    if (msg.text === '/stop') {
+        brot.sendMessage(msg.chat.id, '👋 Stopping bot...');
+        brot.stopPolling(); // 🛑 Stop long polling here
+    }
+});
+
 
 interval = setInterval(() => {
     main();
