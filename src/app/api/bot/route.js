@@ -8,13 +8,62 @@ const token = process.env.TELEGRAM_BOT_TOKEN
 
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.')
 
-const bot = new Bot(token)
+// const bot = new Bot(token)
 
 
 const chat_id = process.env.CHAT_ID_GROUP;
 const EVENT_NAME = "Launched Token TetrisChain"
 const EVENT_TIME = "2025-07-25 20:00:00"
 
+
+
+
+// let interval = null
+
+// let menit = 1;
+
+// bot.on('message:text', async (ctx) => {
+//     if (ctx.message.text == "/slebeweuy") {
+//         interval = setInterval(() => {
+//             main();
+//         }, (60 * 1000) * menit)
+
+//         ctx.reply("geus tah")
+//     }
+
+//     if (ctx.message.text == "/guesah") {
+//         clearInterval(interval);
+//         ctx.reply("geus tah")
+//     }
+
+
+// })
+
+
+// const TelegramBot = require('node-telegram-bot-api');
+
+// const brot = new TelegramBot(token, { polling: true });
+
+// // Handle commands/messages
+// brot.on('message', (msg) => {
+//     console.log(`Received message from ${msg.chat.id}: ${msg.text}`);
+
+//     if (msg.text === '/stop') {
+//         brot.sendMessage(msg.chat.id, '👋 Stopping bot...');
+//         brot.stopPolling(); // 🛑 Stop long polling here
+//     }
+// });
+
+
+// interval = setInterval(() => {
+//     main();
+// }, (60 * 1000) * menit)
+
+
+import TelegramBot from 'node-telegram-bot-api';
+
+// const TOKEN = process.env.BOT_TOKEN;
+const bot = new TelegramBot(token);
 
 function getCountdown(eventTimeStr) {
     const eventTime = new Date(eventTimeStr); // format: '2025-07-30 20:00:00'
@@ -34,62 +83,39 @@ function getCountdown(eventTimeStr) {
     return { jam, menit, detik };
 }
 
-function main() {
-    if (!getCountdown(EVENT_TIME)) {
-        bot.api.sendMessage(chat_id, `${EVENT_NAME} is Live now Checkout https://x.com/tetrischain`)
-    }
+export async function POST(req, res) {
 
-    const { jam, menit, detik } = getCountdown(EVENT_TIME);
-    const CUSTOM_MESSAGE = `🚨Launch in ${jam} Hours ${menit} Minutes ${detik} Seconds. 
-                  ⚡To The ${EVENT_NAME}."
-                  🔥Stay Ready!."
-                  🌐https://tetrischain.fun/`;
 
-    bot.api.sendMessage(chat_id, CUSTOM_MESSAGE);
+
+    const chatId = process.env.CHAT_ID_GROUP;
+
+    setInterval(async () => {
+        const eventTime = new Date('2025-07-30T20:00:00');
+        const now = new Date();
+        const diff = (eventTime - now) / 1000;
+
+
+
+        if (!getCountdown(eventTime)) {
+            await bot.sendMessage(chatId, `${EVENT_NAME} is Live now Checkout https://x.com/tetrischain`)
+        } else {
+            const { jam, menit, detik } = getCountdown(EVENT_TIME);
+            const CUSTOM_MESSAGE = `🚨Launch in ${jam} Hours ${menit} Minutes ${detik} Seconds. 
+                      ⚡To The ${EVENT_NAME}."
+                      🔥Stay Ready!."
+                      🌐https://tetrischain.fun/`;
+
+            bot.sendMessage(chat_id, CUSTOM_MESSAGE);
+        }
+
+
+    }, 60000)
+
 }
 
-let interval = null
-
-let menit = 1;
-
-bot.on('message:text', async (ctx) => {
-    if (ctx.message.text == "/slebeweuy") {
-        interval = setInterval(() => {
-            main();
-        }, (60 * 1000) * menit)
-
-        ctx.reply("geus tah")
-    }
-
-    if (ctx.message.text == "/guesah") {
-        clearInterval(interval);
-        ctx.reply("geus tah")
-    }
-
-
-})
-
-
-const TelegramBot = require('node-telegram-bot-api');
-
-const brot = new TelegramBot(token, { polling: true });
-
-// Handle commands/messages
-brot.on('message', (msg) => {
-    console.log(`Received message from ${msg.chat.id}: ${msg.text}`);
-
-    if (msg.text === '/stop') {
-        brot.sendMessage(msg.chat.id, '👋 Stopping bot...');
-        brot.stopPolling(); // 🛑 Stop long polling here
-    }
-});
-
-
-interval = setInterval(() => {
-    main();
-}, (60 * 1000) * menit)
 
 
 
-export const POST = webhookCallback(bot, 'std/http')
-
+// function main() {
+//
+// }
