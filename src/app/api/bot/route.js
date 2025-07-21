@@ -37,38 +37,44 @@ function getCountdown(eventTimeStr) {
     return { jam, menit, detik };
 }
 
-function main(){
-    if(!getCountdown(EVENT_TIME)){
+function main() {
+    if (!getCountdown(EVENT_TIME)) {
         bot.api.sendMessage(chat_id, `${EVENT_NAME} is Live now Checkout https://x.com/tetrischain`)
     }
 
-    const {jam, menit, detik } = getCountdown(EVENT_TIME);
+    const { jam, menit, detik } = getCountdown(EVENT_TIME);
     const CUSTOM_MESSAGE = `🚨Launch in ${jam} Hours ${menit} Minutes ${detik} Seconds. 
                   ⚡To The ${EVENT_NAME}."
                   🔥Stay Ready!."
                   🌐https://tetrischain.fun/`;
-    
+
     bot.api.sendMessage(chat_id, CUSTOM_MESSAGE);
 }
 
+let interval = null
+
+
 bot.on('message:text', async (ctx) => {
-    let interval = null
     let menit = 1;
-    if(ctx.message.text == "/slebeweuy"){
-        interval = setInterval(()=> {
+    if (ctx.message.text == "/slebeweuy") {
+        interval = setInterval(() => {
             main();
-        }, (60*1000)*menit)
+        }, (60 * 1000) * menit)
 
         ctx.reply("geus tah")
     }
 
-    if(ctx.message.text == "/guesah"){
+    if (ctx.message.text == "/guesah") {
         clearInterval(interval);
         ctx.reply("geus tah")
     }
 
-    
+
 })
+
+interval = setInterval(() => {
+    main();
+}, (60 * 1000) * menit)
 
 
 
